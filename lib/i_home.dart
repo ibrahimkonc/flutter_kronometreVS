@@ -29,6 +29,7 @@ class _IHomeState extends State<IHome> with SingleTickerProviderStateMixin {
   start() {
     if (isStop || !isActive) {
       controller.forward();
+      if (isStop) laps.clear();
       timer = Timer.periodic(const Duration(milliseconds: 1), (_timer) {
         duration = Duration(milliseconds: total + _timer.tick);
         setState(() {});
@@ -74,18 +75,51 @@ class _IHomeState extends State<IHome> with SingleTickerProviderStateMixin {
       body: SafeArea(
         child: Column(
           children: [
-            Text(
-              (duration).toString(),
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView(
-                children: [
-                  for (var item in laps) Text(item.toString()),
-                ],
-                // children: laps.map((e) => Text(e.toString())).toList(),
+            // ignore: avoid_unnecessary_containers
+            Container(
+              child: Text(
+                (duration).toString(),
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
             ),
+            Expanded(
+                child: Container(
+              // ignore: prefer_const_constructors
+              margin: EdgeInsets.all(10),
+              // ignore: prefer_const_constructors
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueGrey),
+                  borderRadius: BorderRadius.circular(15)),
+              child: ListView.builder(
+                itemCount: laps.length,
+                itemBuilder: (context, index) => Container(
+                  decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color.fromARGB(255, 255, 0, 217)),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("${index + 1}"),
+                      // ignore: prefer_const_constructors
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("${laps[index]}"),
+                      SizedBox(width: 50),
+                      Expanded(child: Text("${laps[index]}")),
+
+                      // ignore: prefer_const_constructors
+                      Icon(Icons.arrow_forward_ios)
+                    ],
+                  ),
+                ),
+              ),
+            )
+
+                // children: laps.map((e) => Text(e.toString())).toList(),
+                ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
